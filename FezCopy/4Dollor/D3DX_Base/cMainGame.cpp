@@ -1,29 +1,38 @@
 #include "stdafx.h"
 #include "cMainGame.h"
+#include "FileStream.h"
 
 
 
 cMainGame::cMainGame()
 {
+	angle = 0.0f;
 }
 
 
 cMainGame::~cMainGame()
 {
+	SAFE_DELETE(m_pGrid);
+	owlHead->Release();
+	owlBody->Release();
 	g_pSprite->Destroy();
 	g_pTextureManager->Destroy();
-	//g_pObjectManager->Destroy();
-	g_Scene->Destroy();
 	g_pDeviceManager->Destroy();
 }
 
 void cMainGame::Setup()
 {
-	//cInGame* m_pGame = new cInGame;
-	cMainMenu* m_pMenu = new cMainMenu;
-	g_Scene->AddScene("menu", m_pMenu);
-	//g_Scene->AddScene("game", m_pGame);
-	g_Scene->SetUp();
+	m_pGrid = new cGrid;
+	m_pGrid->Setup("", "field2.png", 50, 50, 1.0f);
+
+	m_pFile = new FileStream;
+	m_pFile->LoadFromXml(L"big_owlao.xml");
+	m_pFile->MakeMesh(&owlBody);
+	m_pFile->LoadFromXml(L"big_owl_headao.xml");
+	m_pFile->MakeMesh(&owlHead);
+	g_pTextureManager->GetTexture("big_owl_headao.png");
+
+
 
 	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 }
@@ -31,12 +40,16 @@ void cMainGame::Setup()
 
 void cMainGame::Update()
 {
+
+	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
+	{
+		angle += 0.1f;
+	}
 	g_pTimeManager->Update();
-	
+
 	g_pTimeManager->GetLastUpdateTime();
 	g_Cam->Update();
 
-	g_Scene->Update();
 
 
 }
@@ -50,16 +63,18 @@ void cMainGame::Render()
 		1.0f, 0);
 	g_pD3DDevice->BeginScene();
 
+	m_pGrid->Render();
 
+	D3DXMATRIXA16 matS, matR; D3DXMatrixIdentity(&matS); D3DXMatrixIdentity(&matR);
+	D3DXMATRIXA16 matWorld; D3DXMatrixIdentity(&matWorld);
+	D3DXMatrixScaling(&matS, 8.0f, 8.0f, 8.0f); D3DXMatrixRotationY(&matR, angle);
+	matWorld = matS*matR;
 
-	g_Scene->Render();
+	g_pD3DDevice->SetTransform(D3DTS_WORLD, &matWorld);
+	g_pD3DDevice->SetTexture(0, g_pTextureManager->GetTexture("big_owl_headao.png"));
+	owlBody->DrawSubset(0);
+	owlHead->DrawSubset(0);
 
-	//RECT rc;
-	//SetRect(&rc, 100, 100, 200, 200);
-	//std::string s = "이것이 굴림체다";
-	//m_pFont->DrawTextA(NULL, s.c_str(), strlen(s.c_str()), &rc,
-	//	DT_LEFT | DT_TOP | DT_NOCLIP,
-	//	D3DCOLOR_XRGB(255, 255, 255));
 
 	g_pD3DDevice->EndScene();
 
@@ -70,5 +85,4 @@ void cMainGame::Render()
 void cMainGame::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	g_Cam->WndProc(hWnd, message, wParam, lParam);
-	g_Scene->WndProc(hWnd, message, wParam, lParam);
 }

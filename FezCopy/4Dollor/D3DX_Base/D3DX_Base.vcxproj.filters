@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="ASELoader">
-      <UniqueIdentifier>{5834f8a1-8136-44a7-9cd7-c6f49a6a45c6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ObjLoader">
       <UniqueIdentifier>{a7ffe645-c88d-4c34-940d-d492329ed0f0}</UniqueIdentifier>
     </Filter>
@@ -30,6 +27,9 @@
     </Filter>
     <Filter Include="UTIL">
       <UniqueIdentifier>{943e6c09-9877-4193-bf31-00d93640068c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XMLParser">
+      <UniqueIdentifier>{dd332397-f382-4571-aba4-72ee160c1478}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -120,6 +120,9 @@
     <ClInclude Include="cUtil.h">
       <Filter>UTIL</Filter>
     </ClInclude>
+    <ClInclude Include="FileStream.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -195,6 +198,9 @@
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="cXFileManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="FileStream.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

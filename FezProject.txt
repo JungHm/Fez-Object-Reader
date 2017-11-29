@@ -1,0 +1,2 @@
+GEOMETRY 그룹
+CollisionType 충돌
